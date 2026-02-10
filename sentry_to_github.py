@@ -131,7 +131,7 @@ class GitHubClient:
             True if issue exists, False otherwise
         """
         url = f"{self.api_url}/search/issues"
-        query = f'repo:{self.repo} is:issue "{title}"'
+        query = f'repo:{self.repo} is:issue {title} in:title'
         params = {'q': query}
         
         try:
