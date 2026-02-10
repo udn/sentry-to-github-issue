@@ -239,7 +239,7 @@ def main():
     sentry_token = os.getenv('SENTRY_AUTH_TOKEN')
     sentry_org = os.getenv('SENTRY_ORG')
     sentry_project = os.getenv('SENTRY_PROJECT')
-    sentry_api_url = os.getenv('SENTRY_API_URL', 'https://sentry.io/api/0/')
+    sentry_api_url = os.getenv('SENTRY_API_URL', 'https://sentry.io/api/0')
     github_token = os.getenv('GITHUB_TOKEN')
     github_repo = os.getenv('GITHUB_REPO')
     
