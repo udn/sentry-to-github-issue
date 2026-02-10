@@ -106,23 +106,26 @@ export class GitHubMCPServer {
 
       switch (name) {
         case 'create_github_issue':
-          if (!args?.title || !args?.body) {
+          if (!(args as any)?.title || !(args as any)?.body) {
             throw new Error('title and body are required');
           }
           return await this.createGitHubIssue({
-            title: args.title,
-            body: args.body,
-            labels: args.labels,
+            title: (args as any).title,
+            body: (args as any).body,
+            labels: (args as any).labels,
           });
         
         case 'list_github_issues':
-          return await this.listGitHubIssues(args?.state || 'open', args?.labels);
+          return await this.listGitHubIssues(
+            (args as any)?.state || 'open', 
+            (args as any)?.labels
+          );
         
         case 'search_github_issues':
-          if (!args?.query) {
+          if (!(args as any)?.query) {
             throw new Error('query is required');
           }
-          return await this.searchGitHubIssues(args.query);
+          return await this.searchGitHubIssues((args as any).query);
         
         default:
           throw new Error(`Unknown tool: ${name}`);

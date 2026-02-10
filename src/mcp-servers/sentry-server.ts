@@ -81,13 +81,16 @@ export class SentryMCPServer {
 
       switch (name) {
         case 'get_sentry_issues':
-          return await this.getSentryIssues(args?.limit || 10, args?.query);
+          return await this.getSentryIssues(
+            (args as any)?.limit || 10, 
+            (args as any)?.query
+          );
         
         case 'get_sentry_issue_details':
-          if (!args?.issueId) {
+          if (!(args as any)?.issueId) {
             throw new Error('issueId is required');
           }
-          return await this.getSentryIssueDetails(args.issueId);
+          return await this.getSentryIssueDetails((args as any).issueId);
         
         default:
           throw new Error(`Unknown tool: ${name}`);
