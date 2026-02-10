@@ -13,7 +13,7 @@ A Python script to automatically fetch issues from Sentry and create correspondi
 
 ## Prerequisites
 
-- Python 3.9 or higher
+- Python 3.7 or higher
 - A Sentry account with API access
 - A GitHub account with repository access
 - Sentry Auth Token ([How to get one](https://docs.sentry.io/api/auth/))
@@ -114,7 +114,7 @@ python sentry_to_github.py --query "is:unresolved" --limit 5 --labels "bug,sentr
 | `SENTRY_PROJECT` | Yes | Sentry project slug |
 | `GITHUB_TOKEN` | Yes | GitHub personal access token |
 | `GITHUB_REPO` | Yes | GitHub repository (format: owner/repo) |
-| `SENTRY_API_URL` | No | Sentry API URL (default: https://sentry.io/api/0/) |
+| `SENTRY_API_URL` | No | Sentry API URL (default: https://sentry.io/api/0) |
 
 ## How It Works
 

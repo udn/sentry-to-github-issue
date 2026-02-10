@@ -13,10 +13,13 @@ from typing import Dict, List, Optional, Tuple
 from dotenv import load_dotenv
 
 
+# Constants
+SEPARATOR_WIDTH = 60
+
 class SentryClient:
     """Client for interacting with Sentry API"""
     
-    def __init__(self, auth_token: str, org: str, project: str, api_url: str = "https://sentry.io/api/0/"):
+    def __init__(self, auth_token: str, org: str, project: str, api_url: str = "https://sentry.io/api/0"):
         self.auth_token = auth_token
         self.org = org
         self.project = project
@@ -287,12 +290,12 @@ def main():
         created_count += 1
     
     # Summary
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * SEPARATOR_WIDTH}")
     print(f"Summary:")
     print(f"  Created: {created_count}")
     print(f"  Skipped: {skipped_count}")
     print(f"  Total:   {len(issues)}")
-    print(f"{'='*60}")
+    print(f"{'=' * SEPARATOR_WIDTH}")
 
 
 if __name__ == '__main__':
