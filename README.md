@@ -13,7 +13,7 @@ A Python script to automatically fetch issues from Sentry and create correspondi
 
 ## Prerequisites
 
-- Python 3.7 or higher
+- Python 3.9 or higher
 - A Sentry account with API access
 - A GitHub account with repository access
 - Sentry Auth Token ([How to get one](https://docs.sentry.io/api/auth/))

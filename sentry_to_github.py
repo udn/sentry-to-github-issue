@@ -9,7 +9,7 @@ import os
 import sys
 import argparse
 import requests
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 from dotenv import load_dotenv
 
 
@@ -141,7 +141,7 @@ class GitHubClient:
             return False
 
 
-def format_github_issue(sentry_issue: Dict) -> tuple[str, str]:
+def format_github_issue(sentry_issue: Dict) -> Tuple[str, str]:
     """
     Format Sentry issue data into GitHub issue format
     
@@ -282,12 +282,9 @@ def main():
             continue
         
         print(f"Creating GitHub issue: {title}")
-        try:
-            gh_issue = github.create_issue(title, body, labels)
-            print(f"✅ Created: {gh_issue['html_url']}")
-            created_count += 1
-        except Exception as e:
-            print(f"❌ Failed to create issue: {e}")
+        gh_issue = github.create_issue(title, body, labels)
+        print(f"✅ Created: {gh_issue['html_url']}")
+        created_count += 1
     
     # Summary
     print(f"\n{'='*60}")
