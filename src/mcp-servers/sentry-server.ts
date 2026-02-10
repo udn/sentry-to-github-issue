@@ -4,7 +4,10 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
-import { SentryIssue } from '../types/index.js';
+import { 
+  GetSentryIssuesArgs, 
+  GetSentryIssueDetailsArgs 
+} from '../types/index.js';
 
 /**
  * MCP Server for Sentry integration
@@ -81,21 +84,38 @@ export class SentryMCPServer {
 
       switch (name) {
         case 'get_sentry_issues':
+          const getSentryArgs = this.parseGetSentryIssuesArgs(args);
           return await this.getSentryIssues(
-            (args as any)?.limit || 10, 
-            (args as any)?.query
+            getSentryArgs.limit || 10, 
+            getSentryArgs.query
           );
         
         case 'get_sentry_issue_details':
-          if (!(args as any)?.issueId) {
-            throw new Error('issueId is required');
-          }
-          return await this.getSentryIssueDetails((args as any).issueId);
+          const getDetailsArgs = this.parseGetSentryIssueDetailsArgs(args);
+          return await this.getSentryIssueDetails(getDetailsArgs.issueId);
         
         default:
           throw new Error(`Unknown tool: ${name}`);
       }
     });
+  }
+
+  private parseGetSentryIssuesArgs(args: unknown): GetSentryIssuesArgs {
+    const parsed = args as Record<string, unknown>;
+    return {
+      limit: typeof parsed?.limit === 'number' ? parsed.limit : undefined,
+      query: typeof parsed?.query === 'string' ? parsed.query : undefined,
+    };
+  }
+
+  private parseGetSentryIssueDetailsArgs(args: unknown): GetSentryIssueDetailsArgs {
+    const parsed = args as Record<string, unknown>;
+    if (typeof parsed?.issueId !== 'string') {
+      throw new Error('issueId is required and must be a string');
+    }
+    return {
+      issueId: parsed.issueId,
+    };
   }
 
   private async getSentryIssues(limit: number = 10, query?: string): Promise<any> {

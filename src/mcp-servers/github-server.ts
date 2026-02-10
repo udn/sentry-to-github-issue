@@ -5,7 +5,12 @@ import {
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
 import { Octokit } from '@octokit/rest';
-import { GitHubIssue } from '../types/index.js';
+import { 
+  GitHubIssue, 
+  CreateGitHubIssueArgs, 
+  ListGitHubIssuesArgs, 
+  SearchGitHubIssuesArgs 
+} from '../types/index.js';
 
 /**
  * MCP Server for GitHub integration
@@ -106,31 +111,60 @@ export class GitHubMCPServer {
 
       switch (name) {
         case 'create_github_issue':
-          if (!(args as any)?.title || !(args as any)?.body) {
-            throw new Error('title and body are required');
-          }
+          const createArgs = this.parseCreateGitHubIssueArgs(args);
           return await this.createGitHubIssue({
-            title: (args as any).title,
-            body: (args as any).body,
-            labels: (args as any).labels,
+            title: createArgs.title,
+            body: createArgs.body,
+            labels: createArgs.labels,
           });
         
         case 'list_github_issues':
+          const listArgs = this.parseListGitHubIssuesArgs(args);
           return await this.listGitHubIssues(
-            (args as any)?.state || 'open', 
-            (args as any)?.labels
+            listArgs.state || 'open', 
+            listArgs.labels
           );
         
         case 'search_github_issues':
-          if (!(args as any)?.query) {
-            throw new Error('query is required');
-          }
-          return await this.searchGitHubIssues((args as any).query);
+          const searchArgs = this.parseSearchGitHubIssuesArgs(args);
+          return await this.searchGitHubIssues(searchArgs.query);
         
         default:
           throw new Error(`Unknown tool: ${name}`);
       }
     });
+  }
+
+  private parseCreateGitHubIssueArgs(args: unknown): CreateGitHubIssueArgs {
+    const parsed = args as Record<string, unknown>;
+    if (typeof parsed?.title !== 'string' || typeof parsed?.body !== 'string') {
+      throw new Error('Both title and body are required and must be strings');
+    }
+    return {
+      title: parsed.title,
+      body: parsed.body,
+      labels: Array.isArray(parsed.labels) 
+        ? parsed.labels.filter((l): l is string => typeof l === 'string')
+        : undefined,
+    };
+  }
+
+  private parseListGitHubIssuesArgs(args: unknown): ListGitHubIssuesArgs {
+    const parsed = args as Record<string, unknown>;
+    return {
+      state: typeof parsed?.state === 'string' ? parsed.state : undefined,
+      labels: typeof parsed?.labels === 'string' ? parsed.labels : undefined,
+    };
+  }
+
+  private parseSearchGitHubIssuesArgs(args: unknown): SearchGitHubIssuesArgs {
+    const parsed = args as Record<string, unknown>;
+    if (typeof parsed?.query !== 'string') {
+      throw new Error('query is required and must be a string');
+    }
+    return {
+      query: parsed.query,
+    };
   }
 
   private async createGitHubIssue(issue: GitHubIssue): Promise<any> {
