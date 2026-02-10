@@ -1,0 +1,30 @@
+{
+  "name": "sentry-to-github-issue",
+  "version": "1.0.0",
+  "description": "Integration to automatically create GitHub issues from Sentry alerts using MCP",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsc && node dist/index.js"
+  },
+  "keywords": [
+    "sentry",
+    "github",
+    "mcp",
+    "integration"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "@octokit/rest": "^20.0.2",
+    "@sentry/node": "^7.100.0",
+    "dotenv": "^16.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3"
+  }
+}
